@@ -14,6 +14,7 @@ public class BinaryNode<T> {
     private T content;
     private BinaryTree<T> left;
     private BinaryTree<T> right;
+    private boolean visited;
     
     public BinaryNode() {
         this(null, null, null);
@@ -27,8 +28,21 @@ public class BinaryNode<T> {
         this.content = content;
         this.left = left;
         this.right = right;
+        this.visited=false;
     }
-
+    
+    public void setVisited(){
+        this.visited=true;
+    }
+    
+    public boolean getVisited(){
+        return this.visited;
+    }
+    
+    public void setVisitedFa(){
+        this.visited=false;
+    }
+    
     public T getContent() {
         return content;
     }
@@ -52,6 +66,4 @@ public class BinaryNode<T> {
     public void setRight(BinaryTree<T> right) {
         this.right = right;
     }
-    
 }
-

@@ -11,6 +11,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,11 +21,8 @@ import java.util.logging.Logger;
  */
 public class ControlArchivosIO {
     
-    public static HashMap<Integer,String> lecturaArchivo(String nombre){
-        int contador=0;
-        HashMap<Integer,String> mapa = new HashMap<>();
-        String cadena;
-        File archivo= new File("preguntas.txt");
+    private static File existFile(String nombre){
+        File archivo = new File(nombre);
         if(!archivo.exists()){
             try {
                 archivo.createNewFile();
@@ -32,13 +30,40 @@ public class ControlArchivosIO {
                 Logger.getLogger(ControlArchivosIO.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return archivo;
+    }
+    
+    public static HashMap<Integer,String> lecturaArchivo(String nombre){
+        int contador=0;
+        HashMap<Integer,String> mapa = new HashMap<>();
+        String cadena;
         try {
-            FileReader fr = new FileReader(archivo);
+            FileReader fr = new FileReader(existFile(nombre));
             try (BufferedReader br = new BufferedReader(fr)) {
                 while((cadena=br.readLine())!=null){
                     mapa.put(contador, cadena);
                     contador++;
                 }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControlArchivosIO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return mapa;
+    }
+    
+    public static HashMap<String,LinkedList<String>> lecturaArchivoRespuestas(String nombre){
+        HashMap<String,LinkedList<String>> mapa= new HashMap<>();
+        String cadena;
+        try {
+            FileReader fr = new FileReader(existFile(nombre));
+            BufferedReader br = new BufferedReader(fr);
+            while((cadena=br.readLine())!=null){
+                String[] respuesta=cadena.split(" ");
+                LinkedList<String> answers=new LinkedList<>();
+                for(int i=1;i<=respuesta.length-1;i++){
+                    answers.addLast(respuesta[i]);
+                }
+                mapa.put(respuesta[0],answers);
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(ControlArchivosIO.class.getName()).log(Level.SEVERE, null, ex);
@@ -47,6 +72,4 @@ public class ControlArchivosIO {
         }
         return mapa;
     }
-    
-    
 }

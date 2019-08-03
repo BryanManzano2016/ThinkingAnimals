@@ -24,11 +24,14 @@ public class ThinkingAnimals {
         
         ControlJuego control=new ControlJuego();
         BinaryTree<String> arbol = control.constructorArbol();
+        //Para ver como se construye al final el arbol
         arbol.IterativeInOrden();
+        //Para ver si estan bien el numero de hijos ingresados
         System.out.println(arbol.iterativecountSons(arbol));
+        //Esto de aqui es para ver por ahora las respuestas que deberian ser ingresadas
         HashMap<String,LinkedList<String>> respuestas = ControlArchivosIO.lecturaArchivoRespuestas("respuestas.txt");
         respuestas.forEach((texto,list)->System.out.println(texto+"=>"+list));
-       
+        
     }
     
 }

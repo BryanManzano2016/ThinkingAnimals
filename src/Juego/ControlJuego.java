@@ -8,6 +8,7 @@ package Juego;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Set;
+import java.util.Stack;
 import tree.BinaryTree;
 
 /**
@@ -40,21 +41,30 @@ public class ControlJuego {
         return arbol;
     }
     
-    /*private void setAnswer(BinaryTree<String> arbol,LinkedList<String> answers,String data){
-        BinaryTree<String> tmp=arbol;
-        String ultimo=answers.get(answers.size()-1);
-        for(int i=0;i<=answers.size()-1;i++){
-            if(answers.removeFirst().equals("si")){
-                tmp=tmp.getRight();
-            }else{
-                tmp=tmp.getLeft();
+    public void setAnswers(String element,LinkedList<String> lista,BinaryTree<String> arbol){
+        Stack<BinaryTree<String>> pila = new Stack();
+        pila.push(arbol);
+        System.out.println(element);
+        while(!pila.isEmpty()&&!lista.isEmpty()){
+            BinaryTree<String> subarbol=pila.pop();
+            if(!arbol.isLeaf()){
+                String res=lista.removeFirst().trim();
+                //System.out.println(lista.size());
+                //System.out.println(arbol.getRoot().getContent()+"  "+res);
+                if(res.equals("si")){
+                    //System.out.println(arbol.getLeft().getRoot().getContent()+"Izquierdo");
+                    pila.push(arbol.getLeft());
+                }else{
+                    //System.out.println(arbol.getRight().getRoot().getContent()+"Dereceho");
+                    pila.push(arbol.getRight());
+                }
+            }if(pila.size()==1 && lista.size()==1){
+                BinaryTree<String> subarbolmi=pila.pop();
+                String fina=lista.removeLast().trim();
+                //Deberia añadir a solo donde pertenece pero guarda tambien donde no
             }
+            
         }
-        String string=tmp.getRoot().getContent();
-        if(answers.removeLast().equals(ultimo)){
-            arbol.add(string,data);
-        }else{
-            arbol.add(string, data);
-        }
-    }*/
+        arbol.IterativeInOrden(); //esto es para visualizar el ingreso en cada iteracion
+    }
 }

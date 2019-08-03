@@ -22,6 +22,8 @@ public class ThinkingAnimals {
      */
     public static void main(String[] args) {
         
+        // TODO code application logic here
+        
         ControlJuego control=new ControlJuego();
         BinaryTree<String> arbol = control.constructorArbol();
         //Para ver como se construye al final el arbol
@@ -29,9 +31,9 @@ public class ThinkingAnimals {
         //Para ver si estan bien el numero de hijos ingresados
         System.out.println(arbol.iterativecountSons(arbol));
         //Esto de aqui es para ver por ahora las respuestas que deberian ser ingresadas
-        HashMap<String,LinkedList<String>> respuestas = ControlArchivosIO.lecturaArchivoRespuestas("respuestas.txt");
+        HashMap<String,LinkedList<String>> respuestas = ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
         respuestas.forEach((texto,list)->System.out.println(texto+"=>"+list));
         
+        
     }
-    
 }

@@ -26,18 +26,7 @@ public class ControlJuego {
         keypreguntas.stream().filter((i) -> (i!=0)).forEachOrdered((i) -> {
             arbol.setChildrens(new BinaryTree(preguntas.get(i)));
         });
-        respuestas.forEach((resp,lista)->arbol.add(resp,lista));
-        /*
-        for (Integer i: preguntas.keySet()) {
-            System.out.println(i + "---" + preguntas.get(i));
-        }
-        */
-        for (String i: respuestas.keySet()) {
-            for (String s: respuestas.get(i)) {
-                System.out.println(i + "..." + s);
-            }
-        }
-        
+        respuestas.forEach((resp,lista)->setAnswers(resp,lista,arbol));
         return arbol;
     }
     

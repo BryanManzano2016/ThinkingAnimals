@@ -67,3 +67,4 @@ public class BinaryNode<T> {
         this.right = right;
     }
 }
+

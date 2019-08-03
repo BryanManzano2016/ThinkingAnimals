@@ -32,10 +32,10 @@ public class ControlJuego{
             }
         });
         // Por cada "camino de desicion" que tiene un animal
-        respuestas.forEach((animal, camino)->setAnswers(animal, camino));
+        respuestas.forEach((animal, camino)->setAnswer(animal, camino,preguntas));
         // Remueve todos las hojas que no tienen respuesta
 
-        this.arbol.removeChildrenWithoutAnwers(this.arbol);
+        //this.arbol.removeChildrenWithoutAnwers(this.arbol);
         
         this.treeAnswer = this.arbol;
     }
@@ -73,6 +73,48 @@ public class ControlJuego{
             }
         }
     }
+    
+    public void setAnswer(String animal, LinkedList<String> lista,HashMap<Integer,String> preguntas){
+        if(!lista.isEmpty() && arbol != null){
+            Stack<BinaryTree<Pregunta>> pila = new Stack<>();
+            pila.push(this.arbol);
+            int contador=0;
+            while (!pila.isEmpty()) {
+                contador++;
+                BinaryTree<Pregunta> nodo = pila.pop();
+                String decision = "";
+                
+                // Se vaciara la lista de decisiones
+                if (!lista.isEmpty())
+                    decision = lista.removeFirst();
+                // Solo añado si esta en el camino
+                if (decision.equals("no")){
+                    if (nodo.getLeft() == null)
+                        nodo.setLeft(new BinaryTree<>(new Pregunta(preguntas.get(contador-1),"")));
+                    pila.push(nodo.getLeft());
+                }
+                else if (decision.equals("si")){
+                    if (nodo.getRight()== null)
+                        nodo.setRight(new BinaryTree<>(new Pregunta(preguntas.get(contador-1),"")));
+                    pila.push(nodo.getRight());
+                }
+                    
+                if (lista.isEmpty()){
+                    // Crea un nodo(que es el arbol) o lo actualiza
+                    if (nodo.getRight() != null && decision.equals("si"))
+                            nodo.getRight().getRoot().getContent().setRespuesta(animal);
+                    else if (nodo.getRight() == null && decision.equals("si"))
+                        nodo.setRight(new BinaryTree<>(new Pregunta("", animal)));
+                    
+                    if (nodo.getLeft() != null && decision.equals("no"))
+                        nodo.getLeft().getRoot().getContent().setRespuesta(animal);
+                    else if (nodo.getLeft() == null && decision.equals("no"))
+                        nodo.setLeft(new BinaryTree<>(new Pregunta("", animal)));
+                }
+            }
+        }
+    }
+    
     // Si hay una decision y ese nodo existe el arbol biajero cambia
     public boolean changeNode(String st){
         if (st.equals("si") && treeAnswer.getRight() != null) {

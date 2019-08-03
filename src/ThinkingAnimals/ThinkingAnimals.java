@@ -46,14 +46,18 @@ public class ThinkingAnimals {
                     break;
                 }
             }
-
+            
             if (validar) {
                 // Llama a las posibles respuestas
                 LinkedList<String> respuestas = control.posibleAnswer();
                     System.out.println("Es posible que el animal sea: ");
-                    respuestas.forEach((st) -> {
-                        System.out.println(st);
-                    });            
+                    for(int i=0;i<=respuestas.size()-1;i++){
+                        if(i!=respuestas.size()-1){
+                            System.out.print(respuestas.get(i)+" o ");
+                        }else{
+                            System.out.print(respuestas.get(i));
+                        }
+                    }         
             }
             // Reinicia el arbol viajero
             control.restartTreeAnswer();     

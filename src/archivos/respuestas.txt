@@ -1,4 +1,6 @@
-Oso si si si
-Lechuza no si no
-Venado si no si
-Paloma no no no
+Oso si si si no no
+Lechuza si si no si si
+Camello si si no no si
+Venado no no no no no
+Pato no si si si si
+Escarabajo no no si si no

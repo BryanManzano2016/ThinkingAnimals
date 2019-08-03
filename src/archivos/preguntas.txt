@@ -1,3 +1,5 @@
 Es este animal un mamífero?
 Es este animal un carnivoro?
 Se para este animal sobre cuatro patas?
+Es de color rojo?
+Es de color Azul?

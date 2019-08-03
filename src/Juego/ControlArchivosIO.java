@@ -21,6 +21,7 @@ import java.util.logging.Logger;
  */
 public class ControlArchivosIO {
     
+    // Si el archivo existe
     private static File existFile(String nombre){
         File archivo = new File(nombre);
         if(!archivo.exists()){
@@ -32,7 +33,7 @@ public class ControlArchivosIO {
         }
         return archivo;
     }
-    
+    // Retorna un hashMap en base a un archivo con las preguntas, ejm de clave-valor -> 1:¿Es carnivoro?
     public static HashMap<Integer,String> lecturaArchivo(String nombre){
         int contador=0;
         HashMap<Integer,String> mapa = new HashMap<>();
@@ -40,7 +41,7 @@ public class ControlArchivosIO {
         try {
             FileReader fr = new FileReader(existFile(nombre));
             try (BufferedReader br = new BufferedReader(fr)) {
-                while((cadena=br.readLine())!=null){
+                while((cadena=br.readLine()) != null){
                     mapa.put(contador, cadena);
                     contador++;
                 }
@@ -50,17 +51,19 @@ public class ControlArchivosIO {
         }
         return mapa;
     }
-    
+    /* Retorna un hashMap en base a un archivo con las respuestas, ejm:
+        perro: ["si", "no", "si"]
+    */
     public static HashMap<String,LinkedList<String>> lecturaArchivoRespuestas(String nombre){
-        HashMap<String,LinkedList<String>> mapa= new HashMap<>();
+        HashMap<String,LinkedList<String>> mapa = new HashMap<>();
         String cadena;
         try {
             FileReader fr = new FileReader(existFile(nombre));
             BufferedReader br = new BufferedReader(fr);
-            while((cadena=br.readLine())!=null){
+            while((cadena=br.readLine()) != null){
                 String[] respuesta=cadena.split(" ");
-                LinkedList<String> answers=new LinkedList<>();
-                for(int i=1;i<=respuesta.length-1;i++){
+                LinkedList<String> answers = new LinkedList<>();
+                for(int i=1; i<=respuesta.length-1; i++){
                     answers.addLast(respuesta[i]);
                 }
                 mapa.put(respuesta[0],answers);
@@ -70,6 +73,7 @@ public class ControlArchivosIO {
         } catch (IOException ex) {
             Logger.getLogger(ControlArchivosIO.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         return mapa;
     }
 }

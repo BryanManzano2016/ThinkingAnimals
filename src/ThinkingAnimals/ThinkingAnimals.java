@@ -1,39 +1,65 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+ 
 package ThinkingAnimals;
 
-import Juego.ControlArchivosIO;
 import Juego.ControlJuego;
-import java.util.HashMap;
 import java.util.LinkedList;
-import tree.BinaryTree;
-
-/**
- *
- * @author Lesther Carranza
- */
+import java.util.Scanner;
+ 
 public class ThinkingAnimals {
+ 
+    public static void main(String[] args){
+        // Objeto que contiene el arbol y la carga de archivos
+        ControlJuego control = new ControlJuego();
+        control.constructorArbol();
+        
+        Scanner sc = new Scanner(System.in);
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) {
+        int numPreguntas = -1;
+        // Bucle infinito hasta que el nro de preguntas sea 0
+        while (numPreguntas != 0) {
+
+            System.out.println("\n***************************");
+            System.out.println("Nro de preguntas: ");
+            try{
+                numPreguntas = Integer.parseInt(sc.nextLine());
+                // Si hay mas preguntas que el arbol pueda responder continue
+                if (numPreguntas > control.getPreguntas().size()) {
+                    System.out.println("Excede el nro de preguntas");
+                    continue;
+                }
+            }catch(NumberFormatException e){
+                System.out.println("No es numero posible");
+                continue;
+            }
+            
+            boolean validar = true;
+            for (int i: control.getPreguntas().keySet()) {
+                if (i == numPreguntas)
+                    break;  
+                System.out.println(control.getPreguntas().get(i));
+
+                String respuesta = sc.nextLine();
+                // Si NO hay movimiento valido
+                if (!((respuesta.equals("si") || respuesta.equals("no")) && control.changeNode(respuesta))){
+                    System.out.println("No tengo repuesta para ese animal");
+                    validar = false;
+                    break;
+                }
+            }
+
+            if (validar) {
+                // Llama a las posibles respuestas
+                LinkedList<String> respuestas = control.posibleAnswer();
+                    System.out.println("Es posible que el animal sea: ");
+                    respuestas.forEach((st) -> {
+                        System.out.println(st);
+                    });            
+            }
+            // Reinicia el arbol viajero
+            control.restartTreeAnswer();     
+            
+        }
         
-        // TODO code application logic here
-        
-        ControlJuego control=new ControlJuego();
-        BinaryTree<String> arbol = control.constructorArbol();
-        //Para ver como se construye al final el arbol
-        arbol.IterativeInOrden();
-        //Para ver si estan bien el numero de hijos ingresados
-        System.out.println(arbol.iterativecountSons(arbol));
-        //Esto de aqui es para ver por ahora las respuestas que deberian ser ingresadas
-        HashMap<String,LinkedList<String>> respuestas = ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
-        respuestas.forEach((texto,list)->System.out.println(texto+"=>"+list));
-        
-        
+
     }
 }

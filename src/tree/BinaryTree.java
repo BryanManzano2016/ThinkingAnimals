@@ -5,6 +5,7 @@
  */
 package tree;
 
+import Juego.Pregunta;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
@@ -143,7 +144,6 @@ public class BinaryTree<T> {
     }
     public void IterativeInOrden(){
         IterativeInOrden(this);
-        System.out.println();
     }
     private void IterativeInOrden(BinaryTree<T> node){
         if(root == null)
@@ -157,7 +157,7 @@ public class BinaryTree<T> {
 		currentNode=currentNode.getLeft();
             }else{
 		BinaryTree<T> n=s.pop();
-		System.out.print(n.getRoot().getContent());
+		System.out.println(n.getRoot().getContent());
 		currentNode=n.getRight();
             }
         }
@@ -311,6 +311,7 @@ public class BinaryTree<T> {
         }
         return null;
     }
+
     
     //Sexto Literal
     public int recursiveCountLevels(){
@@ -451,14 +452,12 @@ public class BinaryTree<T> {
     No hacerles caso (eliminarlos o dejarlos como comentario) pueden llegar a servir
     mas adelante o puede que no*/
     
-    
-    public void setChildrens(BinaryTree<T> nodo) {
-        LinkedList<BinaryTree<T>> lista=new LinkedList<>();
+    // Un nuevo arbol se inicia como hijo izquierdo y derecho de las hojas
+    public void setChildrens( String s1 ) {
+        // Una lista para buscar las hojas
         Stack<BinaryTree<T>> stack = new Stack();
-        //IterativeInOrden();
-        if (this.isEmpty()) {
-            System.exit(0);
-        } else {
+
+        if (!this.isEmpty()) {
             stack.push(this);
             while (!stack.empty()) {
                 BinaryTree<T> subtree = stack.pop();
@@ -468,47 +467,101 @@ public class BinaryTree<T> {
                 if (subtree.root.getRight() != null) {
                     stack.push(subtree.root.getRight());
                 }
+                // Cada nivel tiene hojas por igual, asi una pregunta se ubica en cada nivel
                 if (subtree.isLeaf()) {
-                    lista.add(subtree);
+                    subtree.setLeft(new BinaryTree( new Pregunta(s1) ));
+                    subtree.setRight(new BinaryTree( new Pregunta(s1) ));
                 }
             }
         }
-        lista.forEach((hijo)-> setChildrenInSimpleNode(hijo,nodo));
+    }
+    // Un arbol es dado y retorna las respuestas no vacias( parametro len = 0 es cadenas vacias)
+    public LinkedList<String> getChildrensAnswers(BinaryTree<Pregunta> tree) {
+        
+        // Una lista para buscar las hojas
+        LinkedList<String> respuestas = new LinkedList<>();
+        Stack<BinaryTree<Pregunta>> stack = new Stack();
+
+        if (!this.isEmpty()) {
+            stack.push(tree);
+            while (!stack.empty()) {
+                BinaryTree<Pregunta> subtree = stack.pop();
+                // Si ese arbol tiene en el root con una respuesta no vacia, añade a la lista de hijos
+                if (!subtree.getRoot().getContent().getRespuesta().equals("") && subtree.isLeaf()){
+                    respuestas.addLast(subtree.getRoot().getContent().getRespuesta());
+                    continue;
+                }
+                
+                if (subtree.getLeft() != null) {
+                    stack.push(subtree.getLeft());
+                }
+                if (subtree.getRight() != null) {
+                    stack.push(subtree.getRight());
+                }
+            }
+        }
+        return respuestas;
     }
     
-    private void setChildrenInSimpleNode(BinaryTree<T> nodo,BinaryTree<T> hijo){
-        nodo.setLeft(hijo);
-        nodo.setRight(hijo);
+    // Elimina las hojas sin respuestas
+    public void removeChildrenWithoutAnwers(BinaryTree<Pregunta> tree) {
+        // Una lista para buscar las hojas
+        Stack<BinaryTree<Pregunta>> stack = new Stack();
+
+        if (!this.isEmpty()) {
+            stack.push(tree);
+            while (!stack.empty()) {
+                BinaryTree<Pregunta> subtree = stack.pop();
+               
+                if (subtree.getLeft() != null) {
+                    // Si la respuesta es nula y es hoja hace null a ese hijo
+                    if (subtree.getLeft().getRoot().getContent().getRespuesta().equals("")
+                            && subtree.getLeft().isLeaf()) {
+                        subtree.setLeft(null);
+                    } else
+                        stack.push(subtree.getLeft());
+                }
+                
+                if (subtree.getRight() != null) {
+                    // Si la respuesta es nula y es hoja hace null a ese hijo
+                    if (subtree.getRight().getRoot().getContent().getRespuesta().equals("")
+                            && subtree.getRight().isLeaf()) {
+                        subtree.setRight(null);
+                    } else                    
+                        stack.push(subtree.getRight());
+                }
+            }
+        }
     }
     
     public BinaryNode<T> searchNodo(T element){
         return searchNodeRecursivo(element,this.getRoot());
     }
     
-    private BinaryNode<T> searchNodeRecursivo(T element,BinaryNode<T> nodo){
-        if(nodo==null){
+    private BinaryNode<T> searchNodeRecursivo(T element, BinaryNode<T> nodo){
+        if(nodo == null){
             return null;
         }else if(nodo.getContent().equals(element)){
             return nodo;
         }
         BinaryNode<T> i = null;
         BinaryNode<T> j = null;
-        if(nodo.getLeft()==null && nodo.getRight()!=null){
+        if(nodo.getLeft() == null && nodo.getRight() != null){
             //nodo.getRight().getRoot().setVisited();
             j = searchNodeRecursivo(element,nodo.getRight().getRoot());
-        }else if(nodo.getRight()==null && nodo.getLeft()!=null){
+        }else if(nodo.getRight() == null && nodo.getLeft() != null){
             //nodo.getLeft().getRoot().setVisited();
             i = searchNodeRecursivo(element,nodo.getLeft().getRoot());
-        }else if(nodo.getLeft()!=null && nodo.getRight()!=null){
+        }else if(nodo.getLeft() != null && nodo.getRight() != null){
             /*nodo.getLeft().getRoot().setVisited();
             nodo.getRight().getRoot().setVisited();*/
             i = searchNodeRecursivo(element,nodo.getLeft().getRoot());
             j = searchNodeRecursivo(element,nodo.getRight().getRoot());
         }
-        if(i==null && j == null){
+        if(i == null && j == null){
             return null;
         }else{
-            if(i==null){
+            if(i == null){
                 return j;
             }else{
                 return i;

@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Juego;
 
 import java.util.HashMap;
@@ -11,49 +7,107 @@ import java.util.Set;
 import java.util.Stack;
 import tree.BinaryTree;
 
-/**
- *
- * @author Lesther Carranza
- */
-public class ControlJuego {
+public class ControlJuego{
     
-    public BinaryTree<String> constructorArbol(){
-        HashMap<Integer,String> preguntas = ControlArchivosIO.lecturaArchivo("src/archivos/preguntas.txt");
-        HashMap<String,LinkedList<String>> respuestas = ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
-        
+    private HashMap<Integer,String> preguntas;
+    private HashMap<String,LinkedList<String>> respuestas;
+    private BinaryTree<Pregunta> arbol;
+    
+    private BinaryTree<Pregunta> treeAnswer;
+    
+    public ControlJuego() {}
+    
+    public void constructorArbol(){
+        // Maps con preguntas y respuestas
+        preguntas = ControlArchivosIO.lecturaArchivo("src/archivos/preguntas.txt");
+        respuestas = ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
+        // Crea un arbol con la 1ra pregunta
+        this.arbol = new BinaryTree<>( new Pregunta(preguntas.get(0), "") );
+     
+        // Las otras preguntas se crean como subarboles que cada nivel tiene una pregunta igual
         Set<Integer> keypreguntas = preguntas.keySet();
-        BinaryTree<String> arbol=new BinaryTree<>(preguntas.get(0));
-        keypreguntas.stream().filter((i) -> (i!=0)).forEachOrdered((i) -> {
-            arbol.setChildrens(new BinaryTree(preguntas.get(i)));
+        keypreguntas.forEach((i) -> {
+            if (i != 0) {
+                this.arbol.setChildrens( preguntas.get(i) );
+            }
         });
-        respuestas.forEach((resp,lista)->setAnswers(resp,lista,arbol));
-        return arbol;
+        // Por cada "camino de desicion" que tiene un animal
+        respuestas.forEach((animal, camino)->setAnswers(animal, camino));
+        // Remueve todos las hojas que no tienen respuesta
+
+        this.arbol.removeChildrenWithoutAnwers(this.arbol);
+        
+        this.treeAnswer = this.arbol;
+    }
+    // Usar para asignar el animal a un node segun la ruta
+    public void setAnswers(String animal, LinkedList<String> lista){
+        if(!lista.isEmpty() && arbol != null){
+            Stack<BinaryTree<Pregunta>> pila = new Stack<>();
+            pila.push(this.arbol);
+            
+            while (!pila.isEmpty()) {
+                BinaryTree<Pregunta> nodo = pila.pop();
+                String decision = "";
+                
+                // Se vaciara la lista de decisiones
+                if (!lista.isEmpty())
+                    decision = lista.removeFirst();
+                // Solo añado si esta en el camino
+                if (nodo.getLeft() != null && decision.equals("no"))
+                    pila.push(nodo.getLeft());
+                else if (nodo.getRight() != null && decision.equals("si"))
+                    pila.push(nodo.getRight());
+                    
+                if (lista.isEmpty()){
+                    // Crea un nodo(que es el arbol) o lo actualiza
+                    if (nodo.getRight() != null && decision.equals("si"))
+                            nodo.getRight().getRoot().getContent().setRespuesta(animal);
+                    else if (nodo.getRight() == null && decision.equals("si"))
+                        nodo.setRight(new BinaryTree<>(new Pregunta("", animal)));
+                    
+                    if (nodo.getLeft() != null && decision.equals("no"))
+                        nodo.getLeft().getRoot().getContent().setRespuesta(animal);
+                    else if (nodo.getLeft() == null && decision.equals("no"))
+                        nodo.setLeft(new BinaryTree<>(new Pregunta("", animal)));
+                }
+            }
+        }
+    }
+    // Si hay una decision y ese nodo existe el arbol biajero cambia
+    public boolean changeNode(String st){
+        if (st.equals("si") && treeAnswer.getRight() != null) {
+            treeAnswer = treeAnswer.getRight();
+            return true;
+        }
+        if( st.equals("no") && treeAnswer.getLeft() != null){
+            treeAnswer = treeAnswer.getLeft();
+            return true;
+        }
+        return false;
+    }
+    // Guarda todos los arboles hijos de la decision del usuario
+    public LinkedList<String> posibleAnswer(){
+        LinkedList<String> array = treeAnswer.getChildrensAnswers(treeAnswer);
+        return array;
+    }
+
+    public BinaryTree<Pregunta> getTreeAnswer() {
+        return treeAnswer;
+    }
+    // Reinicia el arbol viajero con las decisiones tomadas, es decir la raiz toma lugar aqui
+    public void restartTreeAnswer(){
+        this.treeAnswer = this.arbol;
     }
     
-    public void setAnswers(String element,LinkedList<String> lista,BinaryTree<String> arbol){
-        Stack<BinaryTree<String>> pila = new Stack();
-        pila.push(arbol);
-        System.out.println(element);
-        while(!pila.isEmpty()&&!lista.isEmpty()){
-            BinaryTree<String> subarbol=pila.pop();
-            if(!arbol.isLeaf()){
-                String res=lista.removeFirst().trim();
-                //System.out.println(lista.size());
-                //System.out.println(arbol.getRoot().getContent()+"  "+res);
-                if(res.equals("si")){
-                    //System.out.println(arbol.getLeft().getRoot().getContent()+"Izquierdo");
-                    pila.push(arbol.getLeft());
-                }else{
-                    //System.out.println(arbol.getRight().getRoot().getContent()+"Dereceho");
-                    pila.push(arbol.getRight());
-                }
-            }if(pila.size()==1 && lista.size()==1){
-                BinaryTree<String> subarbolmi=pila.pop();
-                String fina=lista.removeLast().trim();
-                //Deberia añadir a solo donde pertenece pero guarda tambien donde no
-            }
-            
-        }
-        arbol.IterativeInOrden(); //esto es para visualizar el ingreso en cada iteracion
+    public HashMap<Integer, String> getPreguntas() {
+        return preguntas;
+    }
+
+    public HashMap<String, LinkedList<String>> getRespuestas() {
+        return respuestas;
+    }
+
+    public BinaryTree<Pregunta> getArbol() {
+        return arbol;
     }
 }

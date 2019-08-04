@@ -568,4 +568,29 @@ public class BinaryTree<T> {
             }
         }
     }
+    /*Este metodo regresa el padre de un nodo es util si se quiere añadir la opcion 
+    de volver en el juego de adivinar animal*/
+    
+    public BinaryTree<T> getPadre(T hijo){
+        Stack<BinaryTree<T>> pila=new Stack();
+        pila.push(this);
+        while(!pila.isEmpty()){
+            BinaryTree<T> arbol=pila.pop();
+            if(arbol.getLeft()!=null){
+                if(arbol.getLeft().getRoot().getContent().equals(hijo)){
+                    return arbol;
+                }else{
+                    pila.push(arbol.getLeft());
+                }
+            }
+            else if(arbol.getRight()!=null){
+                if(arbol.getRight().getRoot().getContent().equals(hijo)){
+                    return arbol;
+                }else{
+                    pila.push(arbol.getRight());
+                }
+            }
+        }
+        return null;
+    }
 }

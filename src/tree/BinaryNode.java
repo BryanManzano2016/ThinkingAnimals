@@ -8,6 +8,7 @@ package tree;
 /**
  *
  * @author Lesther Carranza
+ * @param <T>
  */
 public class BinaryNode<T> {
     

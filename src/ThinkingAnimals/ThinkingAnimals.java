@@ -63,7 +63,5 @@ public class ThinkingAnimals {
             control.restartTreeAnswer();     
             
         }
-        
-
     }
 }

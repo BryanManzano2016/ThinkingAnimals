@@ -315,7 +315,7 @@ public class BinaryTree<T> {
     
     //Sexto Literal
     public int recursiveCountLevels(){
-        if(this!=null){
+        if(root!=null){
             return this.recursiveCountLevel();
         }else{
             return 0;
@@ -341,7 +341,7 @@ public class BinaryTree<T> {
         Queue<BinaryNode<T>> q = new LinkedList(); 
         q.add(node); 
         int height = 0; 
-        while (1 == 1){ 
+        while (true){ 
             int nodeCount = q.size(); 
             if (nodeCount == 0) 
                 return height; 
@@ -365,12 +365,15 @@ public class BinaryTree<T> {
             return recursiveisLefty(this)==1;
     }
     private int recursiveisLefty(BinaryTree<T> tree){
-        int total=recursivecountSons(tree);
-        int iz=recursivecountSons(tree.getLeft());
-        if(iz>(total/2))
-            return 1;
-        else
-            return 0;
+        if(tree!=null){
+            int total=recursivecountSons(tree);
+            int iz=recursivecountSons(tree.getLeft());
+            if(iz>(total/2))
+                return 1;
+            else
+                return 0;
+        }
+       return 0; 
     }
     private int recursivecountSons(BinaryTree<T> tree){
         if(tree==null)

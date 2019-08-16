@@ -1,5 +1,5 @@
  
-package Juego;
+package Model;
  
 public class Pregunta {
     private String pregunta;

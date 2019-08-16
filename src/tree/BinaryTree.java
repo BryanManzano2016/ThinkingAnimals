@@ -5,7 +5,7 @@
  */
 package tree;
 
-import Juego.Pregunta;
+import Model.Pregunta;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;

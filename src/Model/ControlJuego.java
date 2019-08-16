@@ -1,5 +1,5 @@
 
-package Juego;
+package Model;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -17,10 +17,10 @@ public class ControlJuego{
     
     public ControlJuego() {}
     
-    public void constructorArbol(){
+    public void constructorArbol(String pathPreguntas,String pathRespuestas){
         // Maps con preguntas y respuestas
-        preguntas = ControlArchivosIO.lecturaArchivo("src/archivos/preguntas.txt");
-        respuestas = ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
+        preguntas = ControlArchivosIO.lecturaArchivo(pathPreguntas);
+        respuestas = ControlArchivosIO.lecturaArchivoRespuestas(pathRespuestas);
         // Crea un arbol con la 1ra pregunta
         this.arbol = new BinaryTree<>( new Pregunta(preguntas.get(0), "") );
      

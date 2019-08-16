@@ -1,7 +1,7 @@
  
 package ThinkingAnimals;
 
-import Juego.ControlJuego;
+import Model.ControlJuego;
 import java.util.LinkedList;
 import java.util.Scanner;
  
@@ -10,7 +10,9 @@ public class ThinkingAnimals {
     public static void main(String[] args){
         // Objeto que contiene el arbol y la carga de archivos
         ControlJuego control = new ControlJuego();
-        control.constructorArbol();
+        String pathResp="src/archivos/respuestas.txt";
+        String pathPreg="src/archivos/preguntas.txt";
+        control.constructorArbol(pathPreg,pathResp);
         
         Scanner sc = new Scanner(System.in);
 

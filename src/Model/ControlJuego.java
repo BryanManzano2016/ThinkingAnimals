@@ -19,8 +19,8 @@ public class ControlJuego{
     
     public void constructorArbol(String pathPreguntas,String pathRespuestas){
         // Maps con preguntas y respuestas
-        preguntas = (HashMap<Integer, String>) ControlArchivosIO.lecturaArchivo("src/archivos/preguntas.txt");
-        respuestas = (HashMap<String, LinkedList<String>>) ControlArchivosIO.lecturaArchivoRespuestas("src/archivos/respuestas.txt");
+        preguntas = (HashMap<Integer, String>) ControlArchivosIO.lecturaArchivo(pathPreguntas);
+        respuestas = (HashMap<String, LinkedList<String>>) ControlArchivosIO.lecturaArchivoRespuestas(pathRespuestas);
         // Crea un arbol con la 1ra pregunta
         this.arbol = new BinaryTree<>( new Pregunta(preguntas.get(0), "") );
      

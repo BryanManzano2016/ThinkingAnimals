@@ -6,8 +6,10 @@
 package Model;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -79,5 +81,24 @@ public class ControlArchivosIO {
         }
         
         return mapa;
+    }
+    
+    public static boolean ingresoNuevaRespuesta(String respuesta,String documento){
+        File archivo=new File(documento);
+        if(!archivo.exists()){
+            return false;
+        }
+        try {
+            try (FileWriter fw = new FileWriter(archivo.getAbsoluteFile(),true); 
+                BufferedWriter bw = new BufferedWriter(fw)) {
+                    bw.newLine();
+                    bw.write(respuesta);
+                    
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ControlArchivosIO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return true;
+        
     }
 }

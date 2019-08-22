@@ -1,9 +1,12 @@
  
 package ThinkingAnimals;
 
+import Model.ControlArchivosIO;
 import Model.ControlJuego;
+import Model.Pregunta;
 import java.util.LinkedList;
 import java.util.Scanner;
+import tree.BinaryTree;
  
 public class ThinkingAnimals {
  
@@ -14,7 +17,9 @@ public class ThinkingAnimals {
         String pathPreg="src/archivos/preguntas.txt";
         control.constructorArbol(pathPreg,pathResp);
         
-        Scanner sc = new Scanner(System.in);
+        ControlArchivosIO.ingresoNuevaRespuesta("este es",pathResp);
+        ControlArchivosIO.ingresoNuevaRespuesta("otra linea",pathResp);
+        /*Scanner sc = new Scanner(System.in);
 
         int numPreguntas = -1;
         // Bucle infinito hasta que el nro de preguntas sea 0
@@ -62,8 +67,13 @@ public class ThinkingAnimals {
                     }         
             }
             // Reinicia el arbol viajero
+            BinaryTree<Pregunta> arbl=control.getArbol();
+            arbl.IterativeInOrden();
             control.restartTreeAnswer();     
             
-        }
+        }*/
+        
+        
+        
     }
 }

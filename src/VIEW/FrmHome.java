@@ -1,20 +1,13 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package VIEW;
 
 import Model.ControlJuego;
+import Model.Pregunta;
 import java.io.File;
-import java.util.Locale;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import tree.BinaryTree;
 
-/**
- *
- * @author Axel
- */
 public class FrmHome extends javax.swing.JFrame {
 
     private String pathResp="src/archivos/respuestas.txt";
@@ -29,7 +22,6 @@ public class FrmHome extends javax.swing.JFrame {
         this.lblPregunta.setText(pathPreg);
         this.lblRespuesta.setText(pathResp);
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -184,10 +176,17 @@ public class FrmHome extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "¡Excede el Numero de Respuestas!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }else{
-            FrmPregunta frmPre=new FrmPregunta(controlJuego.getPreguntas(),controlJuego,Integer.parseInt(this.txtNumero.getText().toString()));
-            this.setVisible(false);
-            frmPre.setVisible(true);
-            frmPre.setLocationRelativeTo(null);
+            FrmPregunta frmPre=new FrmPregunta(controlJuego.getPreguntas(),controlJuego,Integer.parseInt(this.txtNumero.getText()),pathResp);
+            
+            if(Integer.parseInt(this.txtNumero.getText())==0){
+                String todos=controlJuego.getArbol().getChildrensAnswers(controlJuego.getArbol()).toString();
+                JOptionPane.showMessageDialog(this,"Estos Son todo los animales\n"+todos,"Animales",JOptionPane.INFORMATION_MESSAGE);
+                
+            }else{
+                this.setVisible(false);
+                frmPre.setVisible(true);
+                frmPre.setLocationRelativeTo(null);
+            }
         }
     }//GEN-LAST:event_btnEmpezarActionPerformed
 

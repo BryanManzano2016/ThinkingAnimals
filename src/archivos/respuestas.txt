@@ -1,6 +1,9 @@
 Oso si si si no no
 Lechuza si si no si si
-Camello si si no no si
+Camello si si no si no
 Venado no no no no no
 Pato no si si si si
 Escarabajo no no si si no
+Perro si si si si no
+Caballo si si si si si
+Lobo no si si si no

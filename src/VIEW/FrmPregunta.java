@@ -5,10 +5,14 @@
  */
 package VIEW;
 
+import Model.ControlArchivosIO;
 import Model.ControlJuego;
+import Model.Pregunta;
+import Model.metodosLimpieza;
 import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;
+import tree.BinaryTree;
 
 /**
  *
@@ -23,16 +27,21 @@ public class FrmPregunta extends javax.swing.JFrame {
     private HashMap<Integer,String> preguntas;
     private ControlJuego control;
     private int pos=0;
+    private String pathrespuestas;
+    private BinaryTree<Pregunta> arbol;
     private int numeroPreguntas;
     private boolean validar=true;
-    public FrmPregunta(HashMap<Integer,String> preguntas, ControlJuego control,int numeroPreguntas) {
+    private LinkedList<String> lista=new LinkedList<>();
+    public FrmPregunta(HashMap<Integer,String> preguntas, ControlJuego control,int numeroPreguntas,String path) {
         initComponents();
+        this.pathrespuestas=path;
         this.preguntas=preguntas;
+        arbol=control.getArbol();
         this.control=control;
         this.numeroPreguntas=numeroPreguntas;
         this.lblPregunta.setText(preguntas.get(pos++));
+        
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -98,6 +107,9 @@ public class FrmPregunta extends javax.swing.JFrame {
 
     private void cbSiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbSiActionPerformed
         // TODO add your handling code here:
+        lista.add("si");
+        Ingreso(arbol.getRight());
+        arbol=arbol.getRight();
         if(pos<numeroPreguntas)
             if(this.control.changeNode("si")){
                 callRespuestas();
@@ -106,19 +118,49 @@ public class FrmPregunta extends javax.swing.JFrame {
             else{
                 validar=false;
                 JOptionPane.showMessageDialog(this, "¡No poseo ese animal!", "Error", JOptionPane.ERROR_MESSAGE);
-                this.setVisible(false);
-                FrmHome frm=new FrmHome();
-                frm.setVisible(true);
-                frm.setLocationRelativeTo(null);
+                reinicioJuego();
             }
         else{
             pos=preguntas.keySet().size();
             callRespuestas();
         }
     }//GEN-LAST:event_cbSiActionPerformed
-
+    
+    private void reinicioJuego(){
+        this.setVisible(false);
+        FrmHome frm=new FrmHome();
+        frm.setVisible(true);
+        frm.setLocationRelativeTo(null);
+    }
+    
+    private String respuestaFormada(String ingreso){
+        String result=ingreso;
+        for(int i=0;i<=lista.size()-1;i++){
+            result=result+" "+lista.get(i);
+        }
+        return result;
+    }
+    
+    private void Ingreso(BinaryTree<Pregunta> subarbol){
+        if(subarbol==null){
+            int salida=JOptionPane.showConfirmDialog(this,"No poseo ese animal, Deseas agregarlo?","Pregunta",JOptionPane.YES_NO_OPTION);
+            if(salida==JOptionPane.YES_OPTION){
+                String palabra=JOptionPane.showInputDialog("¿Cual es el animal?");
+                ControlArchivosIO.ingresoNuevaRespuesta(respuestaFormada(palabra),pathrespuestas);
+                JOptionPane.showMessageDialog(this,"El ingreso fue exitoso","Ingreso Exitoso",JOptionPane.INFORMATION_MESSAGE);
+                reinicioJuego();
+                
+            }else{
+                JOptionPane.showMessageDialog(this,"Sigue jugando","Intentalo",JOptionPane.INFORMATION_MESSAGE);
+                reinicioJuego();
+            }
+        }
+    }
     private void cbNoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbNoActionPerformed
         // TODO add your handling code here:
+        lista.add("no");
+        Ingreso(arbol.getLeft());
+        arbol = arbol.getLeft();
         if(pos<numeroPreguntas)
             if(this.control.changeNode("no")){
                 callRespuestas();
@@ -127,10 +169,7 @@ public class FrmPregunta extends javax.swing.JFrame {
             else{
                 validar=false;
                 JOptionPane.showMessageDialog(this, "¡No poseo ese animal!", "Error", JOptionPane.ERROR_MESSAGE);
-                this.setVisible(false);
-                FrmHome frm=new FrmHome();
-                frm.setVisible(true);
-                frm.setLocationRelativeTo(null);
+                reinicioJuego();
             }
         else{
             pos=preguntas.keySet().size();
@@ -141,23 +180,20 @@ public class FrmPregunta extends javax.swing.JFrame {
     private void callRespuestas() {
         if(pos==preguntas.keySet().size() && validar){
             LinkedList<String> respuestas = control.posibleAnswer();
-            
             String resp="";
-            for(String respuesta: respuestas){
-                resp+=respuesta+", ";
-            }           
+            if(arbol!=null){
+                if(respuestas.size()!=1){
+                resp = arbol.getChildrensAnswers(arbol).toString();
+                resp = resp.replace("[","").replace("]","").replace(",", " o ");
+                
+            }else{
+                resp= arbol.getRoot().getContent().getRespuesta(); 
+            }
             JOptionPane.showMessageDialog(this, "¡Es posible que el animal sea "+resp+"!", "Info", JOptionPane.INFORMATION_MESSAGE);
-            /*for(int i=0;i<=respuestas.size()-1;i++){
-                if(i!=respuestas.size()-1){
-                    System.out.print(respuestas.get(i)+" o ");
-                }else{
-                    System.out.print(respuestas.get(i));
-                }
-            } */
-            this.setVisible(false);
-            FrmHome frm=new FrmHome();
-            frm.setVisible(true);
-            frm.setLocationRelativeTo(null);
+            
+            reinicioJuego();
+            }
+            
         }
     
     }

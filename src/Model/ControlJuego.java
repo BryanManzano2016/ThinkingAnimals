@@ -115,7 +115,7 @@ public class ControlJuego{
         }
     }
     
-    // Si hay una decision y ese nodo existe el arbol biajero cambia
+    // Si hay una decision y ese nodo existe el arbol viajero cambia
     public boolean changeNode(String st){
         if (st.equals("si") && treeAnswer.getRight() != null) {
             treeAnswer = treeAnswer.getRight();

@@ -2,16 +2,15 @@
 package VIEW;
 
 import Model.ControlJuego;
-import Model.Pregunta;
 import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import tree.BinaryTree;
 
 public class FrmHome extends javax.swing.JFrame {
 
     private String pathResp="src/archivos/respuestas.txt";
     private String pathPreg="src/archivos/preguntas.txt";
+    private ControlJuego controlJuego;
     
     /**
      * Creates new form Home
@@ -21,6 +20,9 @@ public class FrmHome extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.lblPregunta.setText(pathPreg);
         this.lblRespuesta.setText(pathResp);
+        controlJuego=new ControlJuego();
+        controlJuego.constructorArbol(pathPreg,pathResp);
+        maximopreguntas.setText(String.valueOf(controlJuego.getPreguntas().size()));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,6 +43,8 @@ public class FrmHome extends javax.swing.JFrame {
         btnCargarPregunta = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        maximopreguntas = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -96,6 +100,10 @@ public class FrmHome extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel6.setText("Respuestas");
 
+        jLabel3.setText("Solo puede como maximo hacer: ");
+
+        maximopreguntas.setText("jLabel4");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -122,7 +130,12 @@ public class FrmHome extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnCargarResp, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(btnEmpezar, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addGap(18, 18, 18)
+                        .addComponent(maximopreguntas, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -130,7 +143,11 @@ public class FrmHome extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(42, 42, 42)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(maximopreguntas))
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(txtNumero, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -170,8 +187,6 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void btnEmpezarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpezarActionPerformed
         // TODO add your handling code here:
-        ControlJuego controlJuego=new ControlJuego();
-        controlJuego.constructorArbol(pathPreg,pathResp);
         if (Integer.valueOf(txtNumero.getText().toString()) > controlJuego.getPreguntas().size()) {
             JOptionPane.showMessageDialog(this, "¡Excede el Numero de Respuestas!", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -252,10 +267,12 @@ public class FrmHome extends javax.swing.JFrame {
     private javax.swing.JButton btnEmpezar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel lblPregunta;
     private javax.swing.JLabel lblRespuesta;
+    private javax.swing.JLabel maximopreguntas;
     private javax.swing.JTextField txtNumero;
     // End of variables declaration//GEN-END:variables
 }

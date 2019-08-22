@@ -1,6 +1,0 @@
-projectKey=ED-2-1S-2019:ProyectoGrupo5SegundoParcial
-serverUrl=http://200.9.176.59:9000
-serverVersion=7.7.0.23042
-dashboardUrl=http://200.9.176.59:9000/dashboard?id=ED-2-1S-2019%3AProyectoGrupo5SegundoParcial
-ceTaskId=AWxd0QghOWtNxYUJFQJE
-ceTaskUrl=http://200.9.176.59:9000/api/ce/task?id=AWxd0QghOWtNxYUJFQJE

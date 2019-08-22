@@ -8,7 +8,6 @@ package VIEW;
 import Model.ControlArchivosIO;
 import Model.ControlJuego;
 import Model.Pregunta;
-import Model.metodosLimpieza;
 import java.util.HashMap;
 import java.util.LinkedList;
 import javax.swing.JOptionPane;

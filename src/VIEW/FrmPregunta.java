@@ -25,19 +25,21 @@ public class FrmPregunta extends javax.swing.JFrame {
     
     private HashMap<Integer,String> preguntas;
     private ControlJuego control;
-    private int pos=0;
+    private int pos = 0;
     private String pathrespuestas;
     private BinaryTree<Pregunta> arbol;
     private int numeroPreguntas;
-    private boolean validar=true;
-    private LinkedList<String> lista=new LinkedList<>();
+    private boolean validar = true;
+    private LinkedList<String> lista = new LinkedList<>();
+    
     public FrmPregunta(HashMap<Integer,String> preguntas, ControlJuego control,int numeroPreguntas,String path) {
+        
         initComponents();
-        this.pathrespuestas=path;
-        this.preguntas=preguntas;
-        arbol=control.getArbol();
-        this.control=control;
-        this.numeroPreguntas=numeroPreguntas;
+        this.pathrespuestas = path;
+        this.preguntas = preguntas;
+        arbol = control.getArbol();
+        this.control = control;
+        this.numeroPreguntas = numeroPreguntas;
         this.lblPregunta.setText(preguntas.get(pos++));
         
     }
@@ -108,49 +110,49 @@ public class FrmPregunta extends javax.swing.JFrame {
         // TODO add your handling code here:
         lista.add("si");
         Ingreso(arbol.getRight());
-        arbol=arbol.getRight();
+        arbol = arbol.getRight();
         if(pos<numeroPreguntas)
             if(this.control.changeNode("si")){
                 callRespuestas();
                 this.lblPregunta.setText(preguntas.get(pos++));
             }        
             else{
-                validar=false;
+                validar = false;
                 JOptionPane.showMessageDialog(this, "¡No poseo ese animal!", "Error", JOptionPane.ERROR_MESSAGE);
                 reinicioJuego();
             }
         else{
-            pos=preguntas.keySet().size();
+            pos = preguntas.keySet().size();
             callRespuestas();
         }
     }//GEN-LAST:event_cbSiActionPerformed
     
     private void reinicioJuego(){
         this.setVisible(false);
-        FrmHome frm=new FrmHome();
+        FrmHome frm = new FrmHome();
         frm.setVisible(true);
         frm.setLocationRelativeTo(null);
     }
     
     private String respuestaFormada(String ingreso){
-        String result=ingreso;
-        for(int i=0;i<=lista.size()-1;i++){
-            result=result+" "+lista.get(i);
+        String result = ingreso;
+        for(int i=0; i<=lista.size()-1; i++){
+            result = result + " "+ lista.get(i);
         }
         return result;
     }
     
     private void Ingreso(BinaryTree<Pregunta> subarbol){
-        if(subarbol==null){
-            int salida=JOptionPane.showConfirmDialog(this,"No poseo ese animal, Deseas agregarlo?","Pregunta",JOptionPane.YES_NO_OPTION);
-            if(salida==JOptionPane.YES_OPTION){
-                String palabra=JOptionPane.showInputDialog("¿Cual es el animal?");
-                ControlArchivosIO.ingresoNuevaRespuesta(respuestaFormada(palabra),pathrespuestas);
-                JOptionPane.showMessageDialog(this,"El ingreso fue exitoso","Ingreso Exitoso",JOptionPane.INFORMATION_MESSAGE);
+        if(subarbol == null){
+            int salida = JOptionPane.showConfirmDialog(this,"No poseo ese animal, Deseas agregarlo?","Pregunta",JOptionPane.YES_NO_OPTION);
+            if(salida == JOptionPane.YES_OPTION){
+                String palabra = JOptionPane.showInputDialog("¿Cual es el animal?");
+                ControlArchivosIO.ingresoNuevaRespuesta(respuestaFormada(palabra), pathrespuestas);
+                JOptionPane.showMessageDialog(this, "El ingreso fue exitoso", "Ingreso Exitoso", JOptionPane.INFORMATION_MESSAGE);
                 reinicioJuego();
                 
             }else{
-                JOptionPane.showMessageDialog(this,"Sigue jugando","Intentalo",JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Sigue jugando", "Intentalo", JOptionPane.INFORMATION_MESSAGE);
                 reinicioJuego();
             }
         }
@@ -177,24 +179,25 @@ public class FrmPregunta extends javax.swing.JFrame {
     }//GEN-LAST:event_cbNoActionPerformed
 
     private void callRespuestas() {
-        if(pos==preguntas.keySet().size() && validar){
+        if(pos == preguntas.keySet().size() && validar){
             LinkedList<String> respuestas = control.posibleAnswer();
-            String resp="";
-            if(arbol!=null){
-                if(respuestas.size()!=1){
-                resp = arbol.getChildrensAnswers(arbol).toString();
-                resp = resp.replace("[","").replace("]","").replace(",", " o ");
-                
-            }else{
-                resp= arbol.getRoot().getContent().getRespuesta(); 
+            String resp = "";
+            if(arbol != null){
+                if(respuestas.size() != 1){
+                    resp = arbol.getChildrensAnswers(arbol).toString();
+                    resp = resp.replace("[","").replace("]","").replace(",", " o ");
+                }else{
+                    resp = arbol.getRoot().getContent().getRespuesta(); 
+                }
+
+                if (!resp.equals("")) {
+                    JOptionPane.showMessageDialog(this, "¡Es posible que el animal sea " + resp + "!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                } else{
+                    JOptionPane.showMessageDialog(this, "No se encontro ningun animal posible!", "Info", JOptionPane.INFORMATION_MESSAGE);
+                }
+                reinicioJuego();
             }
-            JOptionPane.showMessageDialog(this, "¡Es posible que el animal sea "+resp+"!", "Info", JOptionPane.INFORMATION_MESSAGE);
-            
-            reinicioJuego();
-            }
-            
         }
-    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -8,8 +8,8 @@ import javax.swing.JOptionPane;
 
 public class FrmHome extends javax.swing.JFrame {
 
-    private String pathResp="src/archivos/respuestas.txt";
-    private String pathPreg="src/archivos/preguntas.txt";
+    private String pathResp = "src/archivos/respuestas.txt";
+    private String pathPreg = "src/archivos/preguntas.txt";
     private ControlJuego controlJuego;
     
     /**
@@ -20,7 +20,7 @@ public class FrmHome extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.lblPregunta.setText(pathPreg);
         this.lblRespuesta.setText(pathResp);
-        controlJuego=new ControlJuego();
+        controlJuego = new ControlJuego();
         controlJuego.constructorArbol(pathPreg,pathResp);
         maximopreguntas.setText(String.valueOf(controlJuego.getPreguntas().size()));
     }
@@ -179,22 +179,24 @@ public class FrmHome extends javax.swing.JFrame {
         // TODO add your handling code here:
         String path=getNameFile();
         if(path!=null){
-            this.pathResp=path;
+            this.pathResp = path;
             this.lblRespuesta.setText(pathResp);
         }else
             JOptionPane.showMessageDialog(this, "¡Error al cargar Archivo de Respuestas!", "Error", JOptionPane.ERROR_MESSAGE);
     }//GEN-LAST:event_btnCargarRespActionPerformed
 
     private void btnEmpezarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEmpezarActionPerformed
-        // TODO add your handling code here:
-        if (Integer.valueOf(txtNumero.getText().toString()) > controlJuego.getPreguntas().size()) {
-            JOptionPane.showMessageDialog(this, "¡Excede el Numero de Respuestas!", "Error", JOptionPane.ERROR_MESSAGE);
-            return;
+        // TODO add your handling code here:        
+        if(txtNumero.getText().equals("")){
+            JOptionPane.showMessageDialog(this, "¡Ingrese un valor correcto de preguntas!", "Error", JOptionPane.ERROR_MESSAGE);
+        } else if (Integer.valueOf(txtNumero.getText()) > controlJuego.getPreguntas().size() || 
+                Integer.valueOf(txtNumero.getText()) < 0) {
+            JOptionPane.showMessageDialog(this, "¡No existe un animal con ese nro de preguntas!", "Error", JOptionPane.ERROR_MESSAGE);
         }else{
             FrmPregunta frmPre=new FrmPregunta(controlJuego.getPreguntas(),controlJuego,Integer.parseInt(this.txtNumero.getText()),pathResp);
             
             if(Integer.parseInt(this.txtNumero.getText())==0){
-                String todos=controlJuego.getArbol().getChildrensAnswers(controlJuego.getArbol()).toString();
+                String todos = controlJuego.getArbol().getChildrensAnswers(controlJuego.getArbol()).toString();
                 JOptionPane.showMessageDialog(this,"Estos Son todo los animales\n"+todos,"Animales",JOptionPane.INFORMATION_MESSAGE);
                 
             }else{
@@ -207,9 +209,9 @@ public class FrmHome extends javax.swing.JFrame {
 
     private void btnCargarPreguntaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCargarPreguntaActionPerformed
         // TODO add your handling code here:
-        String path=getNameFile();
+        String path = getNameFile();
         if(path!=null){
-            this.pathPreg=path;
+            this.pathPreg = path;
             this.lblPregunta.setText(pathPreg);
         }else
             JOptionPane.showMessageDialog(this, "¡Error al cargar Archivo de Preguntas!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -255,7 +257,7 @@ public class FrmHome extends javax.swing.JFrame {
         JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(null);
         File file = fc.getSelectedFile();
-        String fileName=null;
+        String fileName = null;
         if (file != null) {
             fileName = file.getAbsolutePath();
         }

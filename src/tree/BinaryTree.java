@@ -329,6 +329,7 @@ public class BinaryTree<T> {
             right=this.getRight().recursiveCountLevels();
         return 1+Math.max(left, right);
     }
+    //
     public int iterativeCountLevels(){
         if(isEmpty()){
             return 0;
@@ -375,11 +376,13 @@ public class BinaryTree<T> {
         }
        return 0; 
     }
+    //
     private int recursivecountSons(BinaryTree<T> tree){
         if(tree==null)
             return 0;
         return 1+recursivecountSons(tree.getLeft())+recursivecountSons(tree.getRight());
     }
+    //
     public boolean iterativeisLefty(){
         if(isEmpty()||isLeaf())
             return true;
@@ -394,6 +397,7 @@ public class BinaryTree<T> {
         else
             return 0;
     }
+    //
     public int iterativecountSons(BinaryTree<T> tree){
         Stack<BinaryTree<T>> pila=new Stack();
         pila.push(tree);
@@ -422,7 +426,7 @@ public class BinaryTree<T> {
         }
         return false;
     }
-    
+    //
     public boolean iterativeisIdentical(BinaryTree<T> another){
         if(isEmpty()||another.isEmpty()||iterativeCountLevels()!=another.iterativeCountLevels()||countLeavesIterative()!=another.countLeavesIterative())
             return false;
@@ -596,4 +600,43 @@ public class BinaryTree<T> {
         }
         return null;
     }
+    
+    // Añade todos los nodos que tienen contenido de determinado nivel
+    public LinkedList<BinaryTree<T>> getObjectsLevel(int i, BinaryTree<T> bTree){
+        // Si el nivel requerido a partir de ese nodo no es valido
+        
+        LinkedList<BinaryTree<T>> list = new LinkedList<>();
+        
+        if (i < 0)
+            return null;
+        if (this != null) {
+            int level = 0; // Nivel desde donde parte
+            
+            Queue<BinaryTree<T>> queue = new LinkedList(); 
+            queue.add(bTree);
+            
+            while (true) {
+                int size = queue.size();
+                // Si ya no hay elementos o se paso del nivel requerido
+                if(size == 0 || level > i)
+                    return list;
+                level++;
+                // Hasta contador size llega a 0, es decir recorre los elementos de ese nivel
+                while (size > 0) {
+                    BinaryTree<T> tree = queue.remove();
+                    
+                    if (tree.getLeft() != null)
+                        queue.add(tree.getLeft());                    
+                    if (tree.getRight() != null)
+                        queue.add(tree.getRight());          
+                    
+                    if (level == i && tree.getRoot().getContent() != null)
+                        list.add(tree);
+                    
+                    size--;
+                }
+            }            
+        }           
+        return list;
+    }      
 }

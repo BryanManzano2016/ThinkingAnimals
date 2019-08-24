@@ -34,7 +34,6 @@ public class ControlJuego{
         // Por cada "camino de desicion" que tiene un animal
         respuestas.forEach((animal, camino)->setAnswer(animal, camino,preguntas));
         // Remueve todos las hojas que no tienen respuesta
-
         //this.arbol.removeChildrenWithoutAnwers(this.arbol);
         
         this.treeAnswer = this.arbol;
